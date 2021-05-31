@@ -1,9 +1,9 @@
 #include "NrfDfuServer.h"
-#include "crc.h"
 #include <cstring>
 #include <iomanip>
 #include <iostream>
 #include <sstream>
+#include "crc.h"
 
 static std::string ToHex(const std::string &s, bool upper_case) {  // Used for debugging
     std::ostringstream ret;
@@ -153,12 +153,14 @@ void NrfDfuServer::manage_state() {
             this->data_mtu_chunks_remaing = this->datafile_data.length() / MTU_CHUNK;
             this->data_mtu_extra_bytes = this->datafile_data.length() % MTU_CHUNK;
             for (i = 0; i < this->data_mtu_chunks_remaing; i++) {
-                this->write_packet( std::string(&this->datafile_data.c_str()[MTU_CHUNK * i], MTU_CHUNK));  // send data file
-                //std::cout << " MTU chunk " << MTU_CHUNK << std::endl;
+                this->write_packet(
+                    std::string(&this->datafile_data.c_str()[MTU_CHUNK * i], MTU_CHUNK));  // send data file
+                // std::cout << " MTU chunk " << MTU_CHUNK << std::endl;
             }
             if (this->data_mtu_extra_bytes) {
-                this->write_packet(std::string(&this->datafile_data.c_str()[MTU_CHUNK * i], this->data_mtu_extra_bytes));  // send data file
-                //std::cout << " Last MTU chunk " << this->data_mtu_extra_bytes << std::endl;
+                this->write_packet(std::string(&this->datafile_data.c_str()[MTU_CHUNK * i],
+                                               this->data_mtu_extra_bytes));  // send data file
+                // std::cout << " Last MTU chunk " << this->data_mtu_extra_bytes << std::endl;
             }
             break;
 
