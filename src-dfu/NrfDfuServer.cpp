@@ -29,7 +29,7 @@ NrfDfuServer::NrfDfuServer(ble_write_t write_command_p, ble_write_t write_reques
       bin_bytes_written(0),
       bin_bytes_to_write(0),
       mtu_extra_bytes(0),
-      mtu_chunks_remaing(0),
+      mtu_chunks_remaining(0),
       mtu_last_chunk(false),
 
       crc32_result(0),
@@ -150,9 +150,9 @@ void NrfDfuServer::manage_state() {
         case DATAFILE_WRITE_FILE:
             this->waiting_response = false;  // Device does not respond until checksum request
             this->calculate_crc(this->datafile_data.c_str(), this->datafile_data.length());
-            this->data_mtu_chunks_remaing = this->datafile_data.length() / MTU_CHUNK;
+            this->data_mtu_chunks_remaining = this->datafile_data.length() / MTU_CHUNK;
             this->data_mtu_extra_bytes = this->datafile_data.length() % MTU_CHUNK;
-            for (i = 0; i < this->data_mtu_chunks_remaing; i++) {
+            for (i = 0; i < this->data_mtu_chunks_remaining; i++) {
                 this->write_packet(
                     std::string(&this->datafile_data.c_str()[MTU_CHUNK * i], MTU_CHUNK));  // send data file
                 // std::cout << " MTU chunk " << MTU_CHUNK << std::endl;
@@ -202,9 +202,9 @@ void NrfDfuServer::manage_state() {
 
         case BINFILE_WRITE_MTU_CHUNK:
             this->waiting_response = false;
-            this->mtu_chunks_remaing = this->bin_bytes_to_write / MTU_CHUNK;
+            this->mtu_chunks_remaining = this->bin_bytes_to_write / MTU_CHUNK;
             this->mtu_extra_bytes = this->bin_bytes_to_write % MTU_CHUNK;
-            for (i = 0; i < this->mtu_chunks_remaing; i++) {
+            for (i = 0; i < this->mtu_chunks_remaining; i++) {
                 this->write_packet(
                     std::string(&this->binfile_data.c_str()[this->bin_bytes_written + MTU_CHUNK * i], MTU_CHUNK));
             }

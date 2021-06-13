@@ -224,13 +224,13 @@ class NrfDfuServer {
 
     // * Data file sending variables
     uint32_t data_mtu_extra_bytes;
-    uint32_t data_mtu_chunks_remaing;
+    uint32_t data_mtu_chunks_remaining;
 
     // * Bin file sending variables
     uint32_t bin_bytes_written;   // Total bin_bytes_written
     uint32_t bin_bytes_to_write;  // Bytes to write on mtu cycle
     uint32_t mtu_extra_bytes;
-    uint32_t mtu_chunks_remaing;
+    uint32_t mtu_chunks_remaining;
     bool mtu_last_chunk;
 
     // * CRC Result is calculated and stored here before sending data
