@@ -10,7 +10,8 @@
 //     std::ostringstream ret;
 //     for (std::string::size_type i = 0; i < s.length(); ++i) {
 //         int z = s[i] & 0xff;
-//         ret << std::hex << std::setfill('0') << std::setw(2) << (upper_case ? std::uppercase : std::nouppercase) << z;
+//         ret << std::hex << std::setfill('0') << std::setw(2) << (upper_case ? std::uppercase : std::nouppercase) <<
+//         z;
 //     }
 //     return ret.str();
 // }
@@ -27,12 +28,12 @@ NrfDfuServer::NrfDfuServer(ble_write_t write_command_p, ble_write_t write_reques
       datafile_data(datafile_data_r),
       binfile_data(binfile_data_r),
 
+      bin_retries(0),
       bin_bytes_written(0),
       bin_bytes_to_write(0),
       mtu_extra_bytes(0),
       mtu_chunks_remaining(0),
       mtu_last_chunk(false),
-      bin_retries(0),
 
       crc32_result(0),
       write_command(write_command_p),
@@ -304,7 +305,7 @@ void NrfDfuServer::event_handler() {
                     // max retires, put FSM into error state
                     if (this->bin_retries < MAX_RETRIES) {
                         this->bin_retries++;
-                        this->bin_bytes_written -= this->bin_bytes_to_write; // Resets bin pointer to previous object
+                        this->bin_bytes_written -= this->bin_bytes_to_write;  // Resets bin pointer to previous object
                         this->state = BINFILE_CREATE_DATA_OBJ;
                         std::cout << "[NrfDfuServer:WARN] Bad checksum ... retrying object write.\n";
                     } else {
